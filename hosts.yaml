@@ -1,0 +1,18 @@
+all:
+  hosts:
+    K8S:
+      ansible_host: localhost
+      KUBECONFIG: /etc/kubernetes/admin.conf
+      PV_DIR: /tmp/pv
+      NAMESPACE: postgresql
+      CAPACITY: 10Gi
+      ADMIN_PASSWORD: kjsdysgsdff3d
+      NAME: test
+      INIT_SQL: |
+        CREATE ROLE my_app WITH LOGIN PASSWORD '12345678';
+        CREATE DATABASE my_db; 
+        \connect my_db;
+        CREATE TABLE public.applog (ID SERIAL PRIMARY KEY,ip VARCHAR(30));
+        GRANT SELECT, insert ON public.applog TO my_app;
+        GRANT USAGE, SELECT ON SEQUENCE applog_id_seq TO my_app;
+      
